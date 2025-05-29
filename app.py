@@ -1,43 +1,58 @@
+
 import streamlit as st
 import yfinance as yf
 import plotly.graph_objects as go
 
-# Page settings
+# Dashboard config
 st.set_page_config(page_title="Sovereign MacroVol Dashboard", layout="wide")
 
-# Define colors
-BACKGROUND_COLOR = "#000000"  # Black
+# Theme colors
+BACKGROUND_COLOR = "#000000"
 GOLD_COLOR = "#FFD700"
 NAVY_COLOR = "#001F3F"
 TEXT_COLOR = "#FFD700"
 
-# Custom CSS styling
-st.markdown(f"""
+# Custom style
+st.markdown("""
     <style>
-        .stApp {{
-            background-color: {BACKGROUND_COLOR};
-            color: {TEXT_COLOR};
-        }}
-        .block-container {{
+        .stApp {
+            background-color: #000000;
+            color: #FFD700;
+        }
+        .block-container {
             padding-top: 2rem;
-        }}
+        }
+        h1, h4 {
+            font-family: 'Georgia', serif;
+            text-align: center;
+        }
+        p {
+            font-family: 'Arial', sans-serif;
+        }
     </style>
 """, unsafe_allow_html=True)
 
-# Header
-st.markdown(f"<h1 style='color:{GOLD_COLOR};'>🧭 Sovereign MacroVol Dashboard</h1>", unsafe_allow_html=True)
-st.markdown(f"<h4 style='color:{TEXT_COLOR};'>Real-Time Intelligence for Nasdaq & S&P Futures</h4>", unsafe_allow_html=True)
+# Title
+st.markdown("<h1 style='color:#FFD700;'>Sovereign MacroVol Dashboard</h1>", unsafe_allow_html=True)
+st.markdown("<h4 style='color:#FFD700;'>Global Trading Intelligence for Nasdaq & S&P Futures</h4>", unsafe_allow_html=True)
 
-# Function to fetch and plot data
+# Chart plotting function
 def plot_asset(symbol, title):
     data = yf.download(symbol, period="1mo", interval="1d")
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=data.index, y=data["Close"], mode='lines', line=dict(color=GOLD_COLOR)))
-    fig.update_layout(title=title, template="plotly_dark", plot_bgcolor=BACKGROUND_COLOR, paper_bgcolor=BACKGROUND_COLOR,
-                      font=dict(color=TEXT_COLOR))
+    fig.add_trace(go.Scatter(x=data.index, y=data["Close"], mode='lines', line=dict(color="#FFD700")))
+    fig.update_layout(
+        title=title,
+        template="plotly_dark",
+        plot_bgcolor="#000000",
+        paper_bgcolor="#000000",
+        font=dict(color="#FFD700", family="Arial"),
+        margin=dict(t=40, b=20, l=20, r=20),
+        hovermode="x unified"
+    )
     return fig
 
-# Display charts
+# Layout
 col1, col2 = st.columns(2)
 
 with col1:
@@ -48,11 +63,17 @@ with col2:
     st.plotly_chart(plot_asset("DX-Y.NYB", "US Dollar Index (DXY)"), use_container_width=True)
     st.plotly_chart(plot_asset("ES=F", "S&P 500 Futures (ES)"), use_container_width=True)
 
-# Sovereign quote section
-st.markdown("---")
-st.markdown(f"<h3 style='color:{GOLD_COLOR};'>🕊 Sovereign Signal of the Day</h3>", unsafe_allow_html=True)
-st.markdown(f"<p style='color:{TEXT_COLOR}; font-size:18px;'>“True wealth is not measured by accumulation, but by alignment — with purpose, with principle, with the pulse of divine timing.”</p>", unsafe_allow_html=True)
+# Quote section
+st.markdown("""
+<div style='border: 1px solid #FFD700; padding: 20px; border-radius: 10px; margin-bottom: 30px;'>
+<h3 style='color:#FFD700;'>Sovereign Signal of the Day</h3>
+<p style='color:#FFD700; font-size:18px;'>True wealth is not measured by accumulation, but by alignment - with purpose, with principle, with the pulse of divine timing.</p>
+</div>
+""", unsafe_allow_html=True)
 
 # Coming soon section
-st.markdown("---")
-st.markdown(f"<p style='color:{NAVY_COLOR}; font-size:16px;'>More features coming soon: Gamma Exposure, Dealer Flow, Macro Calendar, and AI Volatility Forecasts.</p>", unsafe_allow_html=True)
+st.markdown("""
+<div style='border: 1px solid #001F3F; padding: 15px; border-radius: 10px;'>
+<p style='color:#001F3F; font-size:16px;'>More features coming soon: Gamma Exposure, Dealer Flow, Macro Calendar, and AI Volatility Forecasts.</p>
+</div>
+""", unsafe_allow_html=True)
